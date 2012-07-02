@@ -1,12 +1,19 @@
+#########################
+# SSLBOT Base por j03h  #
+# 02/07/2012			#
+# correo@j03h.com		#
+#########################
+
+
 use IO::Socket::SSL;
 use strict;
 use warnings;
 
-my $servidor	= "96.126.108.176";
-my $puerto		= "6697";
-my $nick 		= "perlBot";
-my $canal		= "#j03h";
-my $admin		= "j03h!j03h\@1.0.0.127";
+my $servidor= "96.126.108.176";
+my $puerto	= "6697";
+my $nick 	= "perlBot";
+my $canal	= "#j03h";
+my $admin	= "j03h!j03h\@1.0.0.127";
 
 my $sock = new IO::Socket::SSL(PeerAddr => $servidor, PeerPort => $puerto, Proto => 'tcp');
 
@@ -21,9 +28,9 @@ $sock->print("USER $nick $nick $nick $nick\n\r");
 $sock->print("NICK $nick\n\r");
 
 while (<$sock>) {
-    chomp;
+	chomp;
 	my $out = $_;
-    print "$out\n\r";
+	print "$out\n\r";
 	## server ping
 	if ($out =~ /^PING\s*:(.*?)$/i) {
 		print "\n$out\n\r";
