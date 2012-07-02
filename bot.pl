@@ -2,7 +2,7 @@ use IO::Socket::SSL;
 use strict;
 use warnings;
 
-my $servidor	= "irc.j03h.com";
+my $servidor	= "96.126.108.176";
 my $puerto		= "6697";
 my $nick 		= "perlBot";
 my $canal		= "#j03h";
@@ -17,7 +17,7 @@ if (!$sock) {
 	print "\n++ Conectado\n\r";
 }
 
-$sock->print("USER $nick a a a\n\r");
+$sock->print("USER $nick $nick $nick $nick\n\r");
 $sock->print("NICK $nick\n\r");
 
 while (<$sock>) {
@@ -42,10 +42,14 @@ while (<$sock>) {
 		my $dssge=$5;
 		
 		## channel parser
-		if($dtype && $dtype =~ /PRIVMSG/i){
-			## test
-			if($dssge =~ /\*test/){
-				$sock->print("PRIVMSG $dcpto :Todo okey $dnick!\n\r");
+		if($dtype && $dtype =~ /PRIVMSG/i) {
+			## channel cmds
+			if($dcpto && $dcpto =~ /^#*/i) {
+				## users cmds
+				## test
+				if($dssge =~ /\*test/){
+					$sock->print("PRIVMSG $dcpto :Todo okey $dnick!\n\r");
+				}
 			}
 			## admin cmds
 			my $adm = $dnick."!".$dhost;
@@ -68,8 +72,6 @@ while (<$sock>) {
 					my $msje = $2;
 					$sock->print("PRIVMSG $chan :$2\n\r");
 				}
-			} else {
-				$sock->print("NOTICE $dnick :Lo siento, no tienes los privilegios suficientes para ejecutar este tipo de comando! xD\n\r");
 			}
 		}
 	}
