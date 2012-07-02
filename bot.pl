@@ -1,7 +1,7 @@
 #########################
 # SSLBOT Base por j03h  #
-# 02/07/2012			#
-# correo@j03h.com		#
+# 02/07/2012		#
+# correo@j03h.com	#
 #########################
 
 
@@ -9,7 +9,7 @@ use IO::Socket::SSL;
 use strict;
 use warnings;
 
-my $servidor= "96.126.108.176";
+my $servidor	= "96.126.108.176";
 my $puerto	= "6697";
 my $nick 	= "perlBot";
 my $canal	= "#j03h";
