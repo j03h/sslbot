@@ -1,0 +1,1 @@
+package GetTitle;# by j03h## Modulo que obtiene el titulo de paginas webuse strict;use warning;@EXPORT = qw(GetTitle);#use mod_Curl;sub GetTitle() {	#my ($url) = @_;	my $title = "lol";	return $title;}1;__END__

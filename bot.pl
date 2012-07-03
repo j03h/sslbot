@@ -9,6 +9,10 @@ use IO::Socket::SSL;
 use strict;
 use warnings;
 
+#use mod_ReverseDNS;
+use mod_GetTitle;
+
+
 my $servidor	= "96.126.108.176";
 my $puerto	= "6697";
 my $nick 	= "perlBot";
@@ -56,6 +60,15 @@ while (<$sock>) {
 				## test
 				if($dssge =~ /\*test/){
 					$sock->print("PRIVMSG $dcpto :Todo okey $dnick!\n\r");
+				}
+				## source
+				if($dssge =~ /\*source/){
+					$sock->print("PRIVMSG $dcpto :Mi código de fuente esta aquí: https://github.com/j03h/sslbot/\n\r");
+				}
+				## get title
+				if($dssge =~ m@(((http://)|(https://)|(www\.))\S+[^.,!? ])@g){
+					my $title_url = mod_GetTitle::GetTitle($1);
+					$sock->print("PRIVMSG $dcpto :$dnick : $title_url\n\r");
 				}
 			}
 			## admin cmds
