@@ -4,6 +4,7 @@
 # correo@j03h.com	#
 #########################
 
+<<<<<<< HEAD
 use IO::Socket::SSL;
 #require 'mod_GetTitle.pm';
 #use mod_ReverseDNS;
@@ -11,6 +12,16 @@ use mod_GetTitle;
 use strict;
 use warnings;
 
+=======
+
+use IO::Socket::SSL;
+use strict;
+use warnings;
+
+#use mod_ReverseDNS;
+use mod_GetTitle;
+
+>>>>>>> 212f0dcfa311a6da5bf3180554fe9ce8cf29976c
 
 my $servidor	= "96.126.108.176";
 my $puerto	= "6697";
@@ -67,7 +78,11 @@ while (<$sock>) {
 				## get title
 				if($dssge =~ m@(((http://)|(https://)|(www\.))\S+[^.,!? ])@g){
 					my $title_url = mod_GetTitle::GetTitle($1);
+<<<<<<< HEAD
 					$sock->print("PRIVMSG $dcpto :$title_url\n\r");
+=======
+					$sock->print("PRIVMSG $dcpto :$dnick : $title_url\n\r");
+>>>>>>> 212f0dcfa311a6da5bf3180554fe9ce8cf29976c
 				}
 			}
 			## admin cmds
