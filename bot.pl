@@ -16,6 +16,8 @@ my $nick 	= "perlBot";
 my $canal	= "#j03h";
 my $admin	= "j03h!j03h\@1.0.0.127";
 
+my $pid = fork();
+
 my $sock = new IO::Socket::SSL(PeerAddr => $servidor, PeerPort => $puerto, Proto => 'tcp');
 
 if (!$sock) {
@@ -63,9 +65,17 @@ while (<$sock>) {
 					$sock->print("PRIVMSG $dcpto :Mi código de fuente esta aquí: https://github.com/j03h/sslbot/\n\r");
 				}
 				## get title
-				if($dssge =~ m@(((http://)|(https://)|(www\.))\S+[^.,!? ])@g){
-					my $title_url = mod_GetTitle::GetTitle($1);
-					$sock->print("PRIVMSG $dcpto :$title_url\n\r");
+				if($dssge =~ /(((http:\/\/)|(https:\/\/)|(www\.))\S+[^.,!?\/ ])/g){
+					if (my $pid = fork) {
+						print "OCUPADO... ESPERANDO...\n\r";
+						waitpid($pid, 0);
+					} else {
+						print "EJECUTANDO...\n\r";
+						my $title_url = mod_GetTitle::GetTitle($1);
+						if ($title_url) {
+							$sock->print("PRIVMSG $dcpto : $title_url\n\r");
+						}
+					}
 				}
 			}
 			## admin cmds

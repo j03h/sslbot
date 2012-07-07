@@ -1,7 +1,6 @@
 package mod_Curl;
 
 # by j03h
-#
 # Modulo que hace request GET y POST con Curl
 
 use WWW::Curl::Easy;
