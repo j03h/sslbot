@@ -6,3 +6,4 @@ www.bancochile.cl	FALSE	/	FALSE	0	TS361361	4e1c8f7bf4acd1dbfff3aabc58564960c7ab5
 .youtube.com	TRUE	/	FALSE	0	use_hitbox	d5c5516c3379125f43aa0d495d100d6ddAEAAAAw
 .youtube.com	TRUE	/	FALSE	1362187178	VISITOR_INFO1_LIVE	uI423dGPj2A
 .youtube.com	TRUE	/	FALSE	0	recently_watched_video_id_list	b9e6798d379a70af7d8f47d9e36e81bfWwEAAABzCwAAAHR0T2ttMURVR2c4
+#HttpOnly_.bit.ly	TRUE	/	FALSE	1358719130	_bit	500f1a9a-0008e-04351-431cf10a

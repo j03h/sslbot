@@ -21,7 +21,7 @@ my $pid = fork();
 my $sock = new IO::Socket::SSL(PeerAddr => $servidor, PeerPort => $puerto, Proto => 'tcp');
 
 if (!$sock) {
-	print "\n++ No se puedo conectar\n\r";
+	print "\n++ No se pudo conectar\n\r";
 	exit 1;
 } else {
 	print "\n++ Conectado\n\r";
@@ -33,7 +33,7 @@ $sock->print("NICK $nick\n\r");
 while (<$sock>) {
 	chomp;
 	my $out = $_;
-	print "$out\n\r";
+	##print "$out\n\r";
 	## server ping
 	if ($out =~ /^PING\s*:(.*?)$/i) {
 		print "\n$out\n\r";
@@ -66,15 +66,9 @@ while (<$sock>) {
 				}
 				## get title
 				if($dssge =~ /(((http:\/\/)|(https:\/\/)|(www\.))\S+[^.,!?\/ ])/g){
-					if (my $pid = fork) {
-						print "OCUPADO... ESPERANDO...\n\r";
-						waitpid($pid, 0);
-					} else {
-						print "EJECUTANDO...\n\r";
-						my $title_url = mod_GetTitle::GetTitle($1);
-						if ($title_url) {
-							$sock->print("PRIVMSG $dcpto : $title_url\n\r");
-						}
+					my $title_url = mod_GetTitle::GetTitle($1);
+					if ($title_url) {
+						$sock->print("PRIVMSG $dcpto : $title_url\n\r");
 					}
 				}
 			}
