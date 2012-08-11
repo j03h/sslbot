@@ -1,15 +1,21 @@
 package mod_ReverseDNS;
-#by j03h 
+
+# por j03h
+# modulo que hace su nombre lo dice todo...
+# 08/08/2012
+# julio@j03h.com
 
 use LWP::UserAgent; use HTTP::Request::Common;
 use WWW::Mechanize; use JSON -support_by_pp;
 use Socket;
+use mod_Pastebin;
 
 sub ReverseDNS {
-	if (!$_[0]) { return 0; }
-	my $iipp = resolve($_[0]);
-    #printf "trying to get REVERSE DNS from " . $_[0] ." (".$iipp.") \n\r";
+	my $domain = $_[0];
+	my $iipp = resolve($domain);
+	my $nombre = 'dril_'.$domain;
 	my @res = bing($iipp);
+	printf @res;
 	my @dril;
 	my %hash = map { $_, 1 } @res;
 	my @listasinrep = keys %hash;
@@ -22,8 +28,17 @@ sub ReverseDNS {
 			#my $dprincipal = ( split /\./, $site )[ -2 ].".".( split /\./, $site )[ -1 ];
 			push(@dril,$site);
 		}
-	}
-    return @dril;
+	}		
+	open(my $rdns_file, '>', $nombre) or die return "ERROR RDNS: No puedo escribir en $nombre: $!\n";
+	print $rdns_file "Domain Reverse IP LookUp in: " . $domain . "\n";
+	print $rdns_file "IP Adress: " . $iipp . "\n";
+	print $rdns_file "###\n";
+	print $rdns_file "by j03h\n";
+	print $rdns_file "-----------------------\n\r";
+	print $rdns_file @dril;
+	close($rdns_file);
+	return "Reverse DNS for : " . mod_Pastebin::paste($nombre);
+	`rm $nombre`;
 }
 
 sub bing {
@@ -74,25 +89,18 @@ sub resolve {
 	$ip = $_[1];
 	$va = inet_aton($sitio); 
 	$dire = "Invalido";  
-	if($ip) 
-	{
-		if ($va) 
-		{ 
+	if($ip) {
+		if ($va) { 
 			$dire = inet_ntoa($va); 
 		} 
-		if ($dire == $_[1])
-		{
+		if ($dire == $_[1])	{
 			return $sitio;
 		} 
-		else 
-		{ 
+		else { 
 			return; 
 		}
-	}
-	else
-	{
-		if ($va) 
-		{ 
+	} else {
+		if ($va) { 
 			$dire = inet_ntoa($va);
 			return $dire;
 		}

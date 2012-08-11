@@ -10,11 +10,11 @@ use mod_Curl;
 
 sub GetTitle {
 	my ($url) = @_;
-	print $url."\n\r";
+	#print $url."\n\r";
 	my $title = mod_Curl::req($url);
-	print $title."\n\r";
+	#print $title."\n\r";
 	while ($title =~ m!<title>(.*?)</title>!s) {
-		print $1."\n\r";
+		#print $1."\n\r";
 		my $res = $1;
 		$res =~ s/\r|\n|\t|^\s|\s+$|\s\s//g;
 		return $res;
