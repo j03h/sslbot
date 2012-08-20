@@ -5,11 +5,11 @@
 #########################
 
 use IO::Socket::SSL;
-use Digest::MD5;
+use Digest::MD5 'md5_hex';
+use MIME::Base64;
 use mod_GetTitle;
-
 use mod_Google;
-#use mod_ReverseDNS;
+#use mod_MD5d;
 use strict;
 use warnings;
 
@@ -17,7 +17,7 @@ use warnings;
 my $servidor= "irc.j03h.com";
 my $puerto	= "6697";
 my $nick 	= "perlBot";
-my $canal	= "#j03h";
+my $canal	= "#ajja";
 my $admin	= "j03h!j03h\@6a303368.636f6d";
 
 my $sock = new IO::Socket::SSL(PeerAddr => $servidor, PeerPort => $puerto, Proto => 'tcp');
@@ -35,7 +35,9 @@ $sock->print("NICK $nick\n\r");
 while (<$sock>) {
 	chomp;
 	my $out = $_;
-	##print "$out\n\r";
+	$out =~ s/\n//g;
+	$out =~ s/\r//g;
+	print "$out\n\r";
 	## server ping
 	if ($out =~ /^PING\s*:(.*?)$/i) {
 		#print "\n$out\n\r";
@@ -67,10 +69,10 @@ while (<$sock>) {
 					$sock->print("PRIVMSG $dcpto :Mi código de fuente esta aquí: https://github.com/j03h/sslbot/\n\r");
 				}
 				## get title
-				if($dssge =~ /(((http:\/\/)|(https:\/\/)|(www\.))\S+[^.,!?\/ ])/g){
+				if($dssge =~ /(((http:\/\/)|(https:\/\/)|(www\.))\S+[^.,!?\/ ])/i){
 					my $title_url = mod_GetTitle::GetTitle($1);
 					if ($title_url) {
-						$sock->print("PRIVMSG $dcpto :$title_url\n\r");
+						$sock->print("PRIVMSG $dcpto :".$title_url."\n\r");
 					}
 				}
 				## google
@@ -86,11 +88,37 @@ while (<$sock>) {
 					$sock->print("PRIVMSG $dcpto :[ROT13] ".$rot13."\n\r");
 				}
 				## md5e
-				if($dssge =~ /\*md5e\s(.*?)$/) {
-					my $md5 = Digest::MD5::md5_hex($1);
-					$sock->print("PRIVMSG $dcpto :[MD5] ".$md5."\n\r");
+				if($dssge =~ /\*md5e\s(.*?)$/) {	
+					my $md5 = md5_hex($1);
+					$sock->print("PRIVMSG $dcpto :[MD5e] ".$md5."\n\r");
 				}
-				### md5e
+				## md5d
+				if($dssge =~ /\*md5d\s(.*?)$/) {
+					my $md5 = mod_MD5d::d($1);
+					$sock->print("PRIVMSG $dcpto :[MD5d] ".$md5."\n\r");
+				}
+				## b64e
+				if($dssge =~ /\*b64e\s(.*?)$/) {
+					my $b64e = MIME::Base64::encode($1); 
+					$sock->print("PRIVMSG $dcpto :[B64e] ".$b64e."\n\r");
+				}
+				## b64d
+				if($dssge =~ /\*b64d\s(.*?)$/) {
+					my $b64e = MIME::Base64::decode($1);
+					$sock->print("PRIVMSG $dcpto :[B64d] ".$b64e."\n\r");
+				}
+				#hexe
+				if($dssge =~ /\*hexe\s(.*?)$/) {
+					my $str = $1; 
+					my $hex = unpack('H*', "$str"); 
+					$sock->print("PRIVMSG $dcpto :[HEXe] ".$hex."\n\r");
+				}
+				#hexd
+				if($dssge =~ /\*hexe\s(.*?)$/) {
+					my $str = $1; 
+					my $hex = pack("H*", "$str"); 
+					$sock->print("PRIVMSG $dcpto :[HEXd] ".$hex."\n\r");
+				}
 			}
 			## admin cmds
 			my $adm = $dnick."!".$dhost;
