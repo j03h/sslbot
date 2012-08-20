@@ -11,7 +11,7 @@ sub d {
 	my $type;
 	my @good;
 	my @bad;
-	if ($_[0] =~ /test/) {  $type = 'TEST'; print $type; $hash = '827ccb0eea8a706c4c34a16891f84e7b' } else { $hash = $_[0] }
+	if ($_[0] =~ /test/) {  $type = 'TEST'; $hash = '827ccb0eea8a706c4c34a16891f84e7b' } else { $hash = $_[0] }
 	my %cracks = (
 		'0' => {
 			url => 'http://md5.my-addr.com/md5_decrypt-md5_cracker_online/md5_decoder_tool.php', ref => 'http://md5.my-addr.com/',
@@ -63,7 +63,6 @@ sub d {
 		while ($req =~ /$cracks{$crack}{'mat'}/g) {
 			if(md5_hex($1) eq $hash) {
 				if ($type =~ /TEST/) {
-					print $_[0]."SI";
 					push(@good, $crack); 
 					next;
 				} else {
@@ -77,7 +76,6 @@ sub d {
 	}
 	if ($type =~ /TEST/) {
 		return scalar (@good)."/".scalar(keys %cracks)."\n";
-		foreach(@bad) { print $_; }
 	} else {
 		return "hash not found... :(\r\n"; 
 	}
