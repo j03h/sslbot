@@ -1,16 +1,17 @@
 package mod_MD5d;
 
 # by j03h
+
 use mod_Curl;
 use Digest::MD5 'md5_hex';
 
-my $init = time;
-my $hash;
-my @good;
-my @bad;
-
 sub d {
-	if ($_[0] =~ /test/) { $hash = '827ccb0eea8a706c4c34a16891f84e7b' } else { $hash = $_[0] }
+	my $init = time;
+	my $hash;
+	my $type;
+	my @good;
+	my @bad;
+	if ($_[0] =~ /test/) {  $type = 'TEST'; print $type; $hash = '827ccb0eea8a706c4c34a16891f84e7b' } else { $hash = $_[0] }
 	my %cracks = (
 		'0' => {
 			url => 'http://md5.my-addr.com/md5_decrypt-md5_cracker_online/md5_decoder_tool.php', ref => 'http://md5.my-addr.com/',
@@ -59,21 +60,24 @@ sub d {
 	);
 	for $crack ( keys %cracks ) {
 		my $req = mod_Curl::req($cracks{$crack}{'url'}, $cracks{$crack}{'ref'}, $cracks{$crack}{'pos'});
-		while ($req =~ m/$cracks{$crack}{'mat'}/g) {
+		while ($req =~ /$cracks{$crack}{'mat'}/g) {
 			if(md5_hex($1) eq $hash) {
-				if ($_[0] =~ /test/) {
+				if ($type =~ /TEST/) {
+					print $_[0]."SI";
 					push(@good, $crack); 
 					next;
 				} else {
+					print $_[0]."NO";
 					my $time = time - $init;
-					return("hash found [$crack] [".$time."sec] : $1\r\n"); 
+					return("hash found [#".$crack."] [".$time."sec] : $1\r\n"); 
 				}
 			}
 			push(@bad, $crack); 
         }
 	}
-	if ($_[0] =~ /test/) {
+	if ($type =~ /TEST/) {
 		return scalar (@good)."/".scalar(keys %cracks)."\n";
+		foreach(@bad) { print $_; }
 	} else {
 		return "hash not found... :(\r\n"; 
 	}

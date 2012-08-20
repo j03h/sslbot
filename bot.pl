@@ -9,7 +9,7 @@ use Digest::MD5 'md5_hex';
 use MIME::Base64;
 use mod_GetTitle;
 use mod_Google;
-#use mod_MD5d;
+use mod_MD5d;
 use strict;
 use warnings;
 
