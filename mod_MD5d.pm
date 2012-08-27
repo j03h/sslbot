@@ -4,6 +4,8 @@ package mod_MD5d;
 
 use mod_Curl;
 use Digest::MD5 'md5_hex';
+use strict;
+use warnings;
 
 sub d {
 	my $init = time;
@@ -58,7 +60,7 @@ sub d {
 			pos => 'term='.$hash.'&crackbtn=Crack+that+hash+baby%21', mat => 'Found: md5\("(.*?)"\)',
 		},
 	);
-	for $crack ( keys %cracks ) {
+	for my $crack ( keys %cracks ) {
 		my $req = mod_Curl::req($cracks{$crack}{'url'}, $cracks{$crack}{'ref'}, $cracks{$crack}{'pos'});
 		while ($req =~ /$cracks{$crack}{'mat'}/g) {
 			if(md5_hex($1) eq $hash) {

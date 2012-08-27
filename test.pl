@@ -1,7 +1,10 @@
-use mod_MD5d;
+use mod_SQLiAdmBypass;
 
 use strict;
 use warnings;
 
 my ($test) = $ARGV[0];
-print mod_MD5d::d($test);
+my @res = mod_SQLiAdmBypass::show($test);
+foreach (@res) {
+	print $_;
+}

