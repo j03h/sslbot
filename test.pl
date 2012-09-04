@@ -1,10 +1,8 @@
-use mod_SQLiAdmBypass;
+use mod_proxy;
 
 use strict;
 use warnings;
 
 my ($test) = $ARGV[0];
-my @res = mod_SQLiAdmBypass::show($test);
-foreach (@res) {
-	print $_;
-}
+print mod_proxy::get($test);
+
